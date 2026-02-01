@@ -30,7 +30,7 @@ public class AuthClient {
     public ApiResponse<CreateUserResponse> createUser(CreateUserRequest requestBody) {
         return authWebClient
                 .post()
-                .uri("/internal/create-user")
+                .uri("/internal/user")
                 .bodyValue(requestBody)
                 .retrieve()
                 .onStatus(
