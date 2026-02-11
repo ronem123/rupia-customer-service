@@ -18,8 +18,8 @@ eureka:
 #API base url for Micro services
 services:
   rupia-auth-service:
-    base-url: http://rupia-auth-service
+    base-url: lb://rupia-auth-service
   rupia-wallet-service:
-    base-url: http://rupia-wallet-service
+    base-url: lb://rupia-wallet-service
   rupia-transaction-service:
-    base-url: http://rupia-transaction-service
+    base-url: lb://rupia-transaction-service

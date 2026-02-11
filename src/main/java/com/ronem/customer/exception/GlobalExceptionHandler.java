@@ -13,8 +13,6 @@ import com.ronem.customer.model.response.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -24,20 +22,6 @@ import java.time.Instant;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(AuthenticationException.class)
-    // Http-Status: 401
-    public ResponseEntity<ApiErrorResponse> handleAuthenticationException(org.springframework.security.core.AuthenticationException ae) {
-        log.warn("Authentication failed: {}", ae.getMessage());
-        ApiErrorResponse errorResponse = new ApiErrorResponse(false, HttpStatus.UNAUTHORIZED, "Authentication failed: ", Instant.now());
-        return new ResponseEntity<>(errorResponse, errorResponse.errorCode());
-    }
-
-    // Http-Status: 403
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(AccessDeniedException ae) {
-        ApiErrorResponse errorResponse = new ApiErrorResponse(false, HttpStatus.FORBIDDEN, "Forbidden", Instant.now());
-        return new ResponseEntity<>(errorResponse, errorResponse.errorCode());
-    }
 
     // Http-Status: 404
     @ExceptionHandler(NoHandlerFoundException.class)

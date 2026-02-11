@@ -34,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse registerNewCustomer(CreateCustomerRequestBody request) {
         CreateUserRequest userRequest = customerMapper.toUserRequest(request);
+        userRequest.setUserRole("CUSTOMER");
         ApiResponse<CreateUserResponse> response = authClient.createUser(userRequest);
         if (!response.isSuccess()) {
             throw new RuntimeException("User creation failed with " + response.getMessage());

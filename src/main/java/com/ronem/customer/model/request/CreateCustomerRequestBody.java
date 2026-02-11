@@ -26,7 +26,7 @@ public class CreateCustomerRequestBody {
     private String name;
     private LocalDate birthDate;
     private Gender gender;
-    private String contact;
+    private String mobileNumber;
 
     private String idNumber;
 
