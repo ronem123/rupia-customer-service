@@ -48,7 +48,7 @@ public class Customer {
     private LocalDate birthDate;
 
     @Column(name = "customer_mob_no", unique = true, nullable = false, length = 15)
-    private String contact;
+    private String mobileNumber;
 
     @Column(name = "customer_id_number", unique = true, nullable = false)
     private String idNumber;

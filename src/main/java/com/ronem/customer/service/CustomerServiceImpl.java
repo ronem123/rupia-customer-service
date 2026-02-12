@@ -19,6 +19,7 @@ import com.ronem.customer.model.response.CreateUserResponse;
 import com.ronem.customer.model.response.CustomerResponse;
 import com.ronem.customer.repository.CustomerRepository;
 import com.ronem.customer.service.client.AuthClient;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,20 +34,29 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse registerNewCustomer(CreateCustomerRequestBody request) {
-        CreateUserRequest userRequest = customerMapper.toUserRequest(request);
-        userRequest.setUserRole("CUSTOMER");
-        ApiResponse<CreateUserResponse> response = authClient.createUser(userRequest);
-        if (!response.isSuccess()) {
-            throw new RuntimeException("User creation failed with " + response.getMessage());
-        }
-        //if user is created successfully in rupia-auth-service, retrieve userId to store in the customer table
-        Long userId = response.getData().userId();
-        Customer newCustomer = customerMapper.toEntity(request);
-        newCustomer.setUserId(userId);
-        newCustomer.setStatus(CustomerStatus.KYC_PENDING);
-        newCustomer.setCreatedAt(LocalDateTime.now());
+        Long userId = -1L;
+        try {
+            CreateUserRequest userRequest = customerMapper.toUserRequest(request);
+            userRequest.setUserRole("CUSTOMER");
+            ApiResponse<CreateUserResponse> response = authClient.createUser(userRequest);
+            if (!response.isSuccess()) {
+                throw new RuntimeException("User creation failed with " + response.getMessage());
+            }
+            //if user is created successfully in rupia-auth-service, retrieve userId to store in the customer table
+            userId = response.getData().userId();
+            Customer newCustomer = customerMapper.toEntity(request);
+            newCustomer.setUserId(userId);
+            newCustomer.setStatus(CustomerStatus.KYC_PENDING);
+            newCustomer.setCreatedAt(LocalDateTime.now());
+            return customerMapper.toResponse(customerRepository.save(newCustomer));
 
-        return customerMapper.toResponse(customerRepository.save(newCustomer));
+        } catch (Exception exception) {
+            if (userId != -1) {
+                //delete from auth-service
+                authClient.deleteUser(userId);
+            }
+            throw exception;
+        }
     }
 
 }

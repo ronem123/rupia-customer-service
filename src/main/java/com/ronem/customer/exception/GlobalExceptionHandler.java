@@ -30,6 +30,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, errorResponse.errorCode());
     }
 
+    @ExceptionHandler(AuthServiceException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthServiceException(AuthServiceException ex) {
+        ApiErrorResponse errorResponse =
+                new ApiErrorResponse(false, ex.getStatus(), ex.getMessage(), Instant.now());
+
+        return ResponseEntity.status(ex.getStatus()).body(errorResponse);
+    }
+
 
     // Http-Status: 500
     @ExceptionHandler(Exception.class)
