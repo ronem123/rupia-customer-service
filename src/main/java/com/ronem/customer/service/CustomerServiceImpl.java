@@ -59,4 +59,10 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
+    public Boolean verifyCustomerEKYC(Long customerId) {
+        Customer customer = customerRepository.findById(customerId);
+        return null;
+    }
+
 }

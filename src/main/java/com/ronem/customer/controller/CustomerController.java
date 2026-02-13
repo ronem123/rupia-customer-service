@@ -32,5 +32,17 @@ public class CustomerController {
         CustomerResponse response = customerService.registerNewCustomer(request);
         return new ResponseEntity<>(new ApiResponse<>(true, "User created", response), HttpStatus.OK);
     }
-    
+
+    /**
+     * PUT mapping to verify customer's EKYC and update customer EKYC status from EKYC_PENDING to ACTIVE
+     *
+     * @param userId
+     * @return [boolean]
+     */
+    @PutMapping("/internal/customers/{customerId}/ekyc/verify")
+    ResponseEntity<ApiResponse<Boolean>> verifyCustomerEKYC(@PathVariable Long userId) {
+        boolean verified = customerService.verifyCustomerEKYC(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, "success", verified));
+    }
+
 }

@@ -14,4 +14,6 @@ import com.ronem.customer.model.response.CustomerResponse;
 
 public interface CustomerService {
     CustomerResponse registerNewCustomer(CreateCustomerRequestBody requestBody);
+
+    Boolean verifyCustomerEKYC(Long customerId);
 }
