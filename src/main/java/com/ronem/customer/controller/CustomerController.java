@@ -42,7 +42,9 @@ public class CustomerController {
     @PutMapping("/internal/customers/{customerId}/ekyc/verify")
     ResponseEntity<ApiResponse<Boolean>> verifyCustomerEKYC(@PathVariable Long userId) {
         boolean verified = customerService.verifyCustomerEKYC(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, "success", verified));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ApiResponse<>(true, "success", verified));
     }
 
 }

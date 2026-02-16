@@ -9,6 +9,8 @@
 
 package com.ronem.customer.service;
 
+import com.ronem.customer.exception.AuthServiceException;
+import com.ronem.customer.exception.BadRequestException;
 import com.ronem.customer.mapper.CustomerMapper;
 import com.ronem.customer.model.entity.Customer;
 import com.ronem.customer.model.enums.CustomerStatus;
@@ -21,6 +23,7 @@ import com.ronem.customer.repository.CustomerRepository;
 import com.ronem.customer.service.client.AuthClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -59,10 +62,16 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Transactional
     @Override
     public Boolean verifyCustomerEKYC(Long customerId) {
-        Customer customer = customerRepository.findById(customerId);
-        return null;
+        Customer customer = customerRepository.getCustomerByUserId(customerId)
+                .orElseThrow(() -> new AuthServiceException(HttpStatus.NOT_FOUND, "Sorry but user not exists"));
+        if (customer.getStatus() == CustomerStatus.ACTIVE) {
+            throw new BadRequestException("User already verified");
+        }
+        customer.setStatus(CustomerStatus.ACTIVE);
+        return true;
     }
 
 }
