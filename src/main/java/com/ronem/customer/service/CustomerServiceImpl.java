@@ -23,11 +23,13 @@ import com.ronem.customer.repository.CustomerRepository;
 import com.ronem.customer.service.client.AuthClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -37,12 +39,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse registerNewCustomer(CreateCustomerRequestBody request) {
+        log.info("Register new customer from CustomerService");
         Long userId = -1L;
         try {
             CreateUserRequest userRequest = customerMapper.toUserRequest(request);
             userRequest.setUserRole("CUSTOMER");
+            log.info("Setting user Role as {}", userRequest.getUserRole());
             ApiResponse<CreateUserResponse> response = authClient.createUser(userRequest);
-            if (!response.isSuccess()) {
+            log.info("User create Response {}", response);
+            if (response == null || !response.isSuccess()) {
+                log.error("Response was null");
                 throw new RuntimeException("User creation failed with " + response.getMessage());
             }
             //if user is created successfully in rupia-auth-service, retrieve userId to store in the customer table

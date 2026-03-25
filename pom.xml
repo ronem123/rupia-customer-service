@@ -36,12 +36,7 @@
         <!--Spring WEB-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webmvc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -118,6 +113,14 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!--====================Eureka Discovery End=================-->
+
+        <!--Sub modules-->
+        <!--Security library-->
+        <dependency>
+            <groupId>com.ronem.rupia</groupId>
+            <artifactId>rupia-security-lib</artifactId>
+            <version>0.0.15-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
