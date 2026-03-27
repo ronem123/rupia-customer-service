@@ -51,9 +51,6 @@ public class CustomerServiceSecurityConfig {
                             PublicPaths.AUTH_PUBLIC_PATHS.forEach(p ->
                                     auth.requestMatchers(p).permitAll()
                             );
-                            PublicPaths.CUSTOMER_PUBLIC_PATHS.forEach(p ->
-                                    auth.requestMatchers(p).permitAll()
-                            );
 
                             auth.anyRequest().authenticated();
                         }

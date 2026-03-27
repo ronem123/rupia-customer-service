@@ -20,6 +20,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
+    @Mapping(target = "contact", source = "mobileNumber")
+    @Mapping(target = "customerStatus", source = "status")
     CustomerResponse toResponse(Customer customer);
 
     Customer toEntity(CreateCustomerRequestBody request);
